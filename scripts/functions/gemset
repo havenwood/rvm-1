@@ -174,7 +174,12 @@ gem_install_force()
   then install_params+=( -v "${gem_version}" )
   fi
 
-  install_params+=( --no-ri --no-rdoc $rvm_gem_options )
+  if __rvm_version_compare "$(\command \gem --version)" -ge 2.2.0
+  then install_params+=( --no-document )
+  else install_params+=( --no-ri --no-rdoc )
+  fi
+
+  install_params+=( $rvm_gem_options )
 
   __rvm_log_command \
     "gem.install.${gem_name}${gem_version:+-}${gem_version:-}" \
